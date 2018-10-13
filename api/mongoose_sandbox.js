@@ -2,7 +2,7 @@
 
 var mongoose = require('mongoose');
 
-mongoose.connect("mongoDB://localhost:27017/sandbox"); 
+mongoose.connect("mongoDB://localhost:27017/sandbox", {useNewUrlParser: true}); 
 
 var db = mongoose.connection;
 
@@ -23,9 +23,22 @@ db.once("open", function() {
     }); 
     var Animal = mongoose.model("Animal", AnimalSchema); 
 
-    var elephant = new 
+    var elephant = new Animal({
+        type: "elephant",
+        size: "Big",
+        color: "gray",
+        mass: 6000,
+        name: "Lawrence"
+    });
 
-    db.close(); 
+    elephant.save(function(err){
+        if(err) console.error("Save Failed.", err)
+        else console.log("Saved!");
+        db.close( function() {
+            console.log("connection is closed");
+        }); 
+    });
+   
 });
 
 
